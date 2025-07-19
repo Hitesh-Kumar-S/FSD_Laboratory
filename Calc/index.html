@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html ng-app="calculatorApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark AngularJS Calculator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .calculator {
+      display: inline-block;
+      background: #1f1f1f;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+      max-width: 400px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      color: #00bcd4;
+    }
+
+    p.instructions {
+      font-size: 14px;
+      color: #bbb;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    input[type="number"] {
+      width: 120px;
+      padding: 5px;
+      font-size: 16px;
+      margin: 10px 0;
+      background-color: #333;
+      border: 1px solid #555;
+      color: #fff;
+      border-radius: 5px;
+    }
+
+    .btn-group button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #00bcd4;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    .btn-group button:hover {
+      background-color: #008fa1;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #f9f9f9;
+    }
+
+    .note {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
+    .error {
+      color: #ff6b6b;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body ng-controller="CalculatorController">
+
+  <div class="calculator">
+    <h2>Welcome to Dark AngularJS Calculator</h2>
+    <p class="instructions">
+      Enter two numbers below and click any button to calculate. Thank you for using this calculator!
+    </p>
+
+    <label for="num1">Enter first number:</label><br>
+    <input type="number" id="num1" ng-model="num1" placeholder="e.g. 10"><br>
+
+    <label for="num2">Enter second number:</label><br>
+    <input type="number" id="num2" ng-model="num2" placeholder="e.g. 5"><br>
+
+    <div class="btn-group">
+      <button ng-click="add()">+</button>
+      <button ng-click="subtract()">−</button>
+      <button ng-click="multiply()">×</button>
+      <button ng-click="divide()">÷</button>
+      <button ng-click="modulus()">%</button>
+      <button ng-click="square()">x²</button>
+      <button ng-click="clear()">Clear</button>
+    </div>
+
+    <div class="result" ng-if="result !== undefined">
+      Result: <span ng-class="{'error': isError}">{{ result }}</span>
+    </div>
+  </div>
+
+  <p class="note">Crafted with 💻 using AngularJS — Dark Mode</p>
+
+  <script src="app.js"></script>
+</body>
+</html>
