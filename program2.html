@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smartphone ChatBot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    /* 📱 Smartphone Frame */
+    .phone-frame {
+      width: 380px;
+      height: 700px;
+      background-color: #000;
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.7);
+      border: 10px solid #333;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* 🔲 Fake notch at top */
+    .notch {
+      width: 120px;
+      height: 24px;
+      background-color: #000;
+      border-radius: 12px;
+      margin: 0 auto 10px auto;
+    }
+
+    /* 📦 Actual chat container inside phone */
+    .chat-container {
+      flex: 1;
+      background-color: #2c2f3a;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background-color: #3a3d4d;
+      color: #ffffff;
+      text-align: center;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-bottom: 1px solid #444;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      background-color: #1e1e2f;
+    }
+
+    .message {
+      display: flex;
+      align-items: flex-end;
+      max-width: 80%;
+      margin-bottom: 12px;
+    }
+
+    .message.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .message.bot {
+      align-self: flex-start;
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      margin: 0 8px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .avatar.user {
+      background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png');
+    }
+
+    .avatar.bot {
+      background-image: url('https://cdn-icons-png.flaticon.com/512/4712/4712027.png');
+    }
+
+    .bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .user .bubble {
+      background-color: #4a90e2;
+      color: white;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot .bubble {
+      background-color: #3d3f5c;
+      color: #e0e0e0;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-input {
+      display: flex;
+      background-color: #2c2f3a;
+      border-top: 1px solid #444;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      font-size: 16px;
+      background-color: #2c2f3a;
+      color: #ffffff;
+    }
+
+    .chat-input input::placeholder {
+      color: #aaa;
+    }
+
+    .chat-input input:focus {
+      outline: none;
+    }
+
+    .chat-input button {
+      padding: 14px 20px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .chat-input button:hover {
+      background-color: #357abd;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="notch"></div>
+    <div class="chat-container">
+      <div class="chat-header">
+        🤖 ChatBot
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById("chatMessages");
+    const userInput = document.getElementById("userInput");
+
+    const motivationalQuotes = [
+      "Believe you can and you're halfway there. – Theodore Roosevelt",
+      "Don’t watch the clock; do what it does. Keep going. – Sam Levenson",
+      "The best way to get started is to quit talking and begin doing. – Walt Disney",
+      "Push yourself, because no one else is going to do it for you.",
+      "Success is what comes after you stop making excuses.",
+      "Dream it. Wish it. Do it.",
+      "Great things never come from comfort zones.",
+      "Stay positive. Work hard. Make it happen.",
+      "Start where you are. Use what you have. Do what you can.",
+      "It always seems impossible until it’s done. – Nelson Mandela"
+    ];
+
+    let greeted = false;
+
+    function sendMessage() {
+      const text = userInput.value.trim();
+      if (text === "") return;
+
+      appendMessage(text, "user");
+      userInput.value = "";
+
+      setTimeout(() => {
+        respondWithMotivation();
+      }, 500);
+    }
+
+    function respondWithMotivation() {
+      const quote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+
+      let response = "";
+      if (!greeted) {
+        response += "👋 Hello! I'm your motivational chatbot.\n\n";
+        greeted = true;
+      }
+
+      response += "💬 Remember: " + quote;
+
+      appendMessage(response, "bot");
+    }
+
+    function appendMessage(message, type) {
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `message ${type}`;
+
+      const avatar = document.createElement("div");
+      avatar.className = `avatar ${type}`;
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.innerText = message;
+
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(bubble);
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    userInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
